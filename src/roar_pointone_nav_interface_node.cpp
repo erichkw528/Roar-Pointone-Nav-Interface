@@ -1,4 +1,4 @@
-#include "roar_septentrio_interface/roar_septentrio_interface_node.hpp"
+#include "roar_pointone_nav_interface/roar_pointone_nav_interface_node.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "GeographicLib/Geocentric.hpp"
 #include "GeographicLib/LocalCartesian.hpp"
@@ -7,9 +7,9 @@
 
 namespace ROAR
 {
-  namespace SeptentrioInterface
+  namespace PointoneNavInterface
   {
-    SeptentrioInterfaceNode::SeptentrioInterfaceNode() : rclcpp::Node("septentrio_interface_node")
+    PointoneNavInterfaceNode::PointoneNavInterfaceNode() : rclcpp::Node("point_1_nav_interface_node")
     {
       this->declare_parameter("debug", false);
       if (this->get_parameter("debug").as_bool())
@@ -29,7 +29,7 @@ namespace ROAR
       this->gps_subscriber_ = this->create_subscription<gps_msgs::msg::GPSFix>(
           "/gps/fix",
           qos,
-          std::bind(&SeptentrioInterfaceNode::gps_callback, this, std::placeholders::_1));
+          std::bind(&PointoneNavInterfaceNode::gps_callback, this, std::placeholders::_1));
       this->odom_publisher_ = this->create_publisher<nav_msgs::msg::Odometry>("/roar/odometry", 10);
       this->tf_broadcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(this);
       this->parse_datum();
@@ -41,13 +41,13 @@ namespace ROAR
                                                                  << "\n\t Base Link Frame: " << this->get_parameter("base_link_frame").as_string());
     }
 
-    SeptentrioInterfaceNode::~SeptentrioInterfaceNode()
+    PointoneNavInterfaceNode::~PointoneNavInterfaceNode()
     {
       // Destructor logic, if any
-      RCLCPP_DEBUG(get_logger(), "SeptentrioInterfaceNode is destroyed.");
+      RCLCPP_DEBUG(get_logger(), "PointoneNavInterfaceNode is destroyed.");
     }
 
-    void SeptentrioInterfaceNode::gps_callback(const gps_msgs::msg::GPSFix::SharedPtr msg)
+    void PointoneNavInterfaceNode::gps_callback(const gps_msgs::msg::GPSFix::SharedPtr msg)
     {
       nav_msgs::msg::Odometry odom;
       odom.header.frame_id = this->get_parameter("map_frame").as_string();
@@ -99,7 +99,7 @@ namespace ROAR
       this->publishTransformFromOdom(std::make_shared<nav_msgs::msg::Odometry>(odom));
     }
 
-    void SeptentrioInterfaceNode::publishTransformFromOdom(const nav_msgs::msg::Odometry::SharedPtr odom)
+    void PointoneNavInterfaceNode::publishTransformFromOdom(const nav_msgs::msg::Odometry::SharedPtr odom)
     {
       geometry_msgs::msg::TransformStamped transformStamped;
       transformStamped.header.stamp = this->now();
@@ -116,7 +116,7 @@ namespace ROAR
       tf_broadcaster_->sendTransform(transformStamped);
     }
 
-    void SeptentrioInterfaceNode::convert_gnss_to_local_cartesian(GeodeticPosition inputGeoPosition, CartesianPosition &outputCartesianPosition)
+    void PointoneNavInterfaceNode::convert_gnss_to_local_cartesian(GeodeticPosition inputGeoPosition, CartesianPosition &outputCartesianPosition)
     {
 
       proj.Forward(inputGeoPosition.latitude,
@@ -128,7 +128,7 @@ namespace ROAR
     }
 
     void
-    SeptentrioInterfaceNode::parse_datum()
+    PointoneNavInterfaceNode::parse_datum()
     {
       std::string datum_str = this->get_parameter("datum").as_string();
 
@@ -171,7 +171,7 @@ namespace ROAR
 int main(int argc, char **argv)
 {
   rclcpp::init(argc, argv);
-  auto node = std::make_shared<ROAR::SeptentrioInterface::SeptentrioInterfaceNode>();
+  auto node = std::make_shared<ROAR::PointoneNavInterface::PointoneNavInterfaceNode>();
   rclcpp::spin(node->get_node_base_interface());
   rclcpp::shutdown();
 

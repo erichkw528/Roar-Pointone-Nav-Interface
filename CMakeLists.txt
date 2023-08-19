@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(roar_septentrio_interface)
+project(roar_pointone_nav_interface)
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
@@ -21,11 +21,11 @@ set(dependencies
   gps_msgs
 )
 
-ament_auto_add_executable(roar_septentrio_interface_node src/roar_septentrio_interface_node.cpp)
-ament_target_dependencies(roar_septentrio_interface_node ${dependencies})
+ament_auto_add_executable(roar_pointone_nav_interface_node src/roar_pointone_nav_interface_node.cpp)
+ament_target_dependencies(roar_pointone_nav_interface_node ${dependencies})
 
 
-install(TARGETS roar_septentrio_interface_node
+install(TARGETS roar_pointone_nav_interface_node
   DESTINATION lib/${PROJECT_NAME})
 
 install(DIRECTORY include DESTINATION share/${PROJECT_NAME})

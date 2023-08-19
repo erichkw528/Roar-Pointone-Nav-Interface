@@ -13,14 +13,14 @@ def generate_launch_description():
 
     ld = LaunchDescription()
     odom_publisher = launch_ros.actions.Node(
-        package="roar_septentrio_interface",
-        executable="roar_septentrio_interface_node",
-        name="septentrio_interface_node",
+        package="roar_pointone_nav_interface",
+        executable="roar_pointone_nav_interface_node",
+        name="pointone_nav_interface_node",
         namespace="roar",
         output="screen",
         parameters=[
             os.path.join(
-                get_package_share_directory("roar_septentrio_interface"),
+                get_package_share_directory("roar_pointone_nav_interface"),
                 "param",
                 "config.yaml",
             ),

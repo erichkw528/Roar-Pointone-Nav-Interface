@@ -1,5 +1,5 @@
-#ifndef SEPTENTRIO_INTERFACE_NODE_HPP
-#define SEPTENTRIO_INTERFACE_NODE_HPP
+#ifndef POINT_ONE_NAV_INTERFACE_NODE_HPP
+#define POINT_ONE_NAV_INTERFACE_NODE_HPP
 #include "GeographicLib/Geocentric.hpp"
 #include "GeographicLib/LocalCartesian.hpp"
 #include "rclcpp/rclcpp.hpp"
@@ -9,7 +9,7 @@
 
 namespace ROAR
 {
-    namespace SeptentrioInterface
+    namespace PointoneNavInterface
     {
         struct GeodeticPosition
         {
@@ -23,11 +23,11 @@ namespace ROAR
             double y;
             double z;
         };
-        class SeptentrioInterfaceNode : public rclcpp::Node
+        class PointoneNavInterfaceNode : public rclcpp::Node
         {
         public:
-            SeptentrioInterfaceNode();
-            ~SeptentrioInterfaceNode();
+            PointoneNavInterfaceNode();
+            ~PointoneNavInterfaceNode();
 
         private:
             void parse_datum();
@@ -47,7 +47,7 @@ namespace ROAR
             std::unique_ptr<tf2_ros::TransformBroadcaster>
                 tf_broadcaster_;
         };
-    } // namespace SeptentrioInterface
+    } // namespace PointoneNavInterface
 }
 
-#endif // SEPTENTRIO_INTERFACE_NODE_HPP
+#endif // POINT_ONE_NAV_INTERFACE_NODE_HPP
