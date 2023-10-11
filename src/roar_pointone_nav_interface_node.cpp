@@ -69,13 +69,17 @@ namespace ROAR
       odom.pose.pose.position.z = float(outputCartesianPosition.z);
       if (!std::isnan(msg->dip))
       {
+        RCLCPP_DEBUG(get_logger(), "Dip: %f", msg->dip);
         odom.pose.pose.orientation = tf2::toMsg(tf2::Quaternion(tf2::Vector3(0, 0, 1), msg->dip));
       }
       else if (!(std::isnan(msg->track)))
       {
+        RCLCPP_DEBUG(get_logger(), "Heading: %f", msg->track);
         // convert deg to rad
         double rad = (msg->track + this->get_parameter("heading_offset_deg").as_double()) * M_PI / 180.0;
         odom.pose.pose.orientation = tf2::toMsg(tf2::Quaternion(tf2::Vector3(0, 0, 1), rad));
+      } else {
+        RCLCPP_WARN(get_logger(), "No heading available");
       }
 
       /**
